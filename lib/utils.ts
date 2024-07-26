@@ -5,7 +5,7 @@ export function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs));
 }
 
-export const parseStringify = (value: any) => JSON.parse(JSON.stringify(value));
+export const parseStringify = <T>(value: any) => JSON.parse(JSON.stringify(value)) as T;
 
 export const getAccessType = (userType: UserType) => {
   switch (userType) {
@@ -20,7 +20,7 @@ export const getAccessType = (userType: UserType) => {
   }
 };
 
-export const dateConverter = (timestamp: string): string => {
+export const dateConverter = (timestamp: string | Date): string => {
   const timestampNum = Math.round(new Date(timestamp).getTime() / 1000);
   const date: Date = new Date(timestampNum * 1000);
   const now: Date = new Date();

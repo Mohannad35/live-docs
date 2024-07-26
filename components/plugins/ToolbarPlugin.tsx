@@ -5,8 +5,8 @@
  * LICENSE file in the root directory of this source tree.
  *
  */
-import { useLexicalComposerContext } from '@lexical/react/LexicalComposerContext';
-import { mergeRegister } from '@lexical/utils';
+import { useLexicalComposerContext } from "@lexical/react/LexicalComposerContext";
+import { mergeRegister } from "@lexical/utils";
 import {
   $createParagraphNode,
   $isRootOrShadowRoot,
@@ -19,22 +19,12 @@ import {
   REDO_COMMAND,
   SELECTION_CHANGE_COMMAND,
   UNDO_COMMAND,
-} from 'lexical';
-import {
-  $createHeadingNode,
-  $createQuoteNode,
-  $isHeadingNode,
-} from '@lexical/rich-text';
-import { $setBlocksType } from '@lexical/selection';
-import { $findMatchingParent } from '@lexical/utils';
-import React from 'react';
-import {
-  useCallback,
-  useEffect,
-  useRef,
-  useState,
-  useSyncExternalStore,
-} from 'react';
+} from "lexical";
+import { $createHeadingNode, $createQuoteNode, $isHeadingNode } from "@lexical/rich-text";
+import { $setBlocksType } from "@lexical/selection";
+import { $findMatchingParent } from "@lexical/utils";
+import React from "react";
+import { useCallback, useEffect, useRef, useState, useSyncExternalStore } from "react";
 
 const LowPriority = 1;
 
@@ -55,12 +45,13 @@ export default function ToolbarPlugin() {
 
   const $updateToolbar = useCallback(() => {
     const selection = $getSelection();
+
     if ($isRangeSelection(selection)) {
       // Update text format
-      setIsBold(selection.hasFormat('bold'));
-      setIsItalic(selection.hasFormat('italic'));
-      setIsUnderline(selection.hasFormat('underline'));
-      setIsStrikethrough(selection.hasFormat('strikethrough'));
+      setIsBold(selection.hasFormat("bold"));
+      setIsItalic(selection.hasFormat("italic"));
+      setIsUnderline(selection.hasFormat("underline"));
+      setIsStrikethrough(selection.hasFormat("strikethrough"));
     }
   }, []);
 
@@ -73,8 +64,10 @@ export default function ToolbarPlugin() {
       }),
       editor.registerCommand(
         SELECTION_CHANGE_COMMAND,
+        // eslint-disable-next-line no-unused-vars, unused-imports/no-unused-vars
         (_payload, _newEditor) => {
           $updateToolbar();
+
           return false;
         },
         LowPriority,
@@ -83,6 +76,7 @@ export default function ToolbarPlugin() {
         CAN_UNDO_COMMAND,
         (payload) => {
           setCanUndo(payload);
+
           return false;
         },
         LowPriority,
@@ -91,6 +85,7 @@ export default function ToolbarPlugin() {
         CAN_REDO_COMMAND,
         (payload) => {
           setCanRedo(payload);
+
           return false;
         },
         LowPriority,
@@ -98,154 +93,148 @@ export default function ToolbarPlugin() {
     );
   }, [editor, $updateToolbar]);
 
-  function toggleBlock(type: 'h1' | 'h2' | 'h3' | 'quote') {
+  function toggleBlock(type: "h1" | "h2" | "h3" | "quote") {
     const selection = $getSelection();
 
     if (activeBlock === type) {
       return $setBlocksType(selection, () => $createParagraphNode());
     }
 
-    if (type === 'h1') {
-      return $setBlocksType(selection, () => $createHeadingNode('h1'));
+    if (type === "h1") {
+      return $setBlocksType(selection, () => $createHeadingNode("h1"));
     }
 
-    if (type === 'h2') {
-      return $setBlocksType(selection, () => $createHeadingNode('h2'));
+    if (type === "h2") {
+      return $setBlocksType(selection, () => $createHeadingNode("h2"));
     }
 
-    if (type === 'h3') {
-      return $setBlocksType(selection, () => $createHeadingNode('h3'));
+    if (type === "h3") {
+      return $setBlocksType(selection, () => $createHeadingNode("h3"));
     }
 
-    if (type === 'quote') {
+    if (type === "quote") {
       return $setBlocksType(selection, () => $createQuoteNode());
     }
   }
 
   return (
-    <div className="toolbar" ref={toolbarRef}>
+    <div ref={toolbarRef} className="toolbar">
       <button
+        aria-label="Undo"
+        className="toolbar-item spaced"
         disabled={!canUndo}
         onClick={() => {
           editor.dispatchCommand(UNDO_COMMAND, undefined);
         }}
-        className="toolbar-item spaced"
-        aria-label="Undo"
       >
         <i className="format undo" />
       </button>
       <button
+        aria-label="Redo"
+        className="toolbar-item"
         disabled={!canRedo}
         onClick={() => {
           editor.dispatchCommand(REDO_COMMAND, undefined);
         }}
-        className="toolbar-item"
-        aria-label="Redo"
       >
         <i className="format redo" />
       </button>
       <Divider />
       <button
-        onClick={() => editor.update(() => toggleBlock('h1'))}
-        data-active={activeBlock === 'h1' ? '' : undefined}
-        className={
-          'toolbar-item spaced ' + (activeBlock === 'h1' ? 'active' : '')
-        }
+        className={"toolbar-item spaced " + (activeBlock === "h1" ? "active" : "")}
+        data-active={activeBlock === "h1" ? "" : undefined}
+        onClick={() => editor.update(() => toggleBlock("h1"))}
       >
         <i className="format h1" />
       </button>
       <button
-        onClick={() => editor.update(() => toggleBlock('h2'))}
-        data-active={activeBlock === 'h2' ? '' : undefined}
-        className={
-          'toolbar-item spaced ' + (activeBlock === 'h2' ? 'active' : '')
-        }
+        className={"toolbar-item spaced " + (activeBlock === "h2" ? "active" : "")}
+        data-active={activeBlock === "h2" ? "" : undefined}
+        onClick={() => editor.update(() => toggleBlock("h2"))}
       >
         <i className="format h2" />
       </button>
       <button
-        onClick={() => editor.update(() => toggleBlock('h3'))}
-        data-active={activeBlock === 'h3' ? '' : undefined}
-        className={
-          'toolbar-item spaced ' + (activeBlock === 'h3' ? 'active' : '')
-        }
+        className={"toolbar-item spaced " + (activeBlock === "h3" ? "active" : "")}
+        data-active={activeBlock === "h3" ? "" : undefined}
+        onClick={() => editor.update(() => toggleBlock("h3"))}
       >
         <i className="format h3" />
       </button>
       <Divider />
       <button
-        onClick={() => {
-          editor.dispatchCommand(FORMAT_TEXT_COMMAND, 'bold');
-        }}
-        className={'toolbar-item spaced ' + (isBold ? 'active' : '')}
         aria-label="Format Bold"
+        className={"toolbar-item spaced " + (isBold ? "active" : "")}
+        onClick={() => {
+          editor.dispatchCommand(FORMAT_TEXT_COMMAND, "bold");
+        }}
       >
         <i className="format bold" />
       </button>
       <button
-        onClick={() => {
-          editor.dispatchCommand(FORMAT_TEXT_COMMAND, 'italic');
-        }}
-        className={'toolbar-item spaced ' + (isItalic ? 'active' : '')}
         aria-label="Format Italics"
+        className={"toolbar-item spaced " + (isItalic ? "active" : "")}
+        onClick={() => {
+          editor.dispatchCommand(FORMAT_TEXT_COMMAND, "italic");
+        }}
       >
         <i className="format italic" />
       </button>
       <button
-        onClick={() => {
-          editor.dispatchCommand(FORMAT_TEXT_COMMAND, 'underline');
-        }}
-        className={'toolbar-item spaced ' + (isUnderline ? 'active' : '')}
         aria-label="Format Underline"
+        className={"toolbar-item spaced " + (isUnderline ? "active" : "")}
+        onClick={() => {
+          editor.dispatchCommand(FORMAT_TEXT_COMMAND, "underline");
+        }}
       >
         <i className="format underline" />
       </button>
       <button
-        onClick={() => {
-          editor.dispatchCommand(FORMAT_TEXT_COMMAND, 'strikethrough');
-        }}
-        className={'toolbar-item spaced ' + (isStrikethrough ? 'active' : '')}
         aria-label="Format Strikethrough"
+        className={"toolbar-item spaced " + (isStrikethrough ? "active" : "")}
+        onClick={() => {
+          editor.dispatchCommand(FORMAT_TEXT_COMMAND, "strikethrough");
+        }}
       >
         <i className="format strikethrough" />
       </button>
       <Divider />
       <button
-        onClick={() => {
-          editor.dispatchCommand(FORMAT_ELEMENT_COMMAND, 'left');
-        }}
-        className="toolbar-item spaced"
         aria-label="Left Align"
+        className="toolbar-item spaced"
+        onClick={() => {
+          editor.dispatchCommand(FORMAT_ELEMENT_COMMAND, "left");
+        }}
       >
         <i className="format left-align" />
       </button>
       <button
-        onClick={() => {
-          editor.dispatchCommand(FORMAT_ELEMENT_COMMAND, 'center');
-        }}
-        className="toolbar-item spaced"
         aria-label="Center Align"
+        className="toolbar-item spaced"
+        onClick={() => {
+          editor.dispatchCommand(FORMAT_ELEMENT_COMMAND, "center");
+        }}
       >
         <i className="format center-align" />
       </button>
       <button
-        onClick={() => {
-          editor.dispatchCommand(FORMAT_ELEMENT_COMMAND, 'right');
-        }}
-        className="toolbar-item spaced"
         aria-label="Right Align"
+        className="toolbar-item spaced"
+        onClick={() => {
+          editor.dispatchCommand(FORMAT_ELEMENT_COMMAND, "right");
+        }}
       >
         <i className="format right-align" />
       </button>
       <button
-        onClick={() => {
-          editor.dispatchCommand(FORMAT_ELEMENT_COMMAND, 'justify');
-        }}
-        className="toolbar-item"
         aria-label="Justify Align"
+        className="toolbar-item"
+        onClick={() => {
+          editor.dispatchCommand(FORMAT_ELEMENT_COMMAND, "justify");
+        }}
       >
         <i className="format justify-align" />
-      </button>{' '}
+      </button>{" "}
     </div>
   );
 }
@@ -263,14 +252,16 @@ function useActiveBlock() {
   const getSnapshot = useCallback(() => {
     return editor.getEditorState().read(() => {
       const selection = $getSelection();
+
       if (!$isRangeSelection(selection)) return null;
 
       const anchor = selection.anchor.getNode();
       let element =
-        anchor.getKey() === 'root'
+        anchor.getKey() === "root"
           ? anchor
           : $findMatchingParent(anchor, (e) => {
               const parent = e.getParent();
+
               return parent !== null && $isRootOrShadowRoot(parent);
             });
 
