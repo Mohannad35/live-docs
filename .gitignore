@@ -86,3 +86,5 @@ sketch
 .idx/
 
 # End of https://www.toptal.com/developers/gitignore/api/visualstudiocode,nextjs,react
+# Sentry Config File
+.env.sentry-build-plugin

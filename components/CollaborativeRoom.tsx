@@ -12,6 +12,7 @@ import { updateDocument } from "@/lib/actions/room.actions";
 import ActiveCollaborators from "./ActiveCollaborators";
 import Loader from "./Loader";
 import { Input } from "./ui/input";
+import ShareModal from "./ShareModal";
 
 const CollaborativeRoom = ({
   roomId,
@@ -19,7 +20,6 @@ const CollaborativeRoom = ({
   currentUserType,
   users,
 }: CollaborativeRoomProps) => {
-  // const currentUserType = "editor";
   const [editing, setEditing] = useState(false);
   const [loading, setLoading] = useState(false);
   const [documentTitle, setDocumentTitle] = useState(roomMetadata.title);
@@ -82,7 +82,7 @@ const CollaborativeRoom = ({
                 </>
               )}
 
-              {currentUserType === "editor" && !editing && (
+              {["editor", "creator"].includes(currentUserType) && !editing && (
                 <Image
                   alt="edit"
                   className="cursor-pointer"
@@ -93,7 +93,7 @@ const CollaborativeRoom = ({
                 />
               )}
 
-              {currentUserType !== "editor" && !editing && (
+              {!["editor", "creator"].includes(currentUserType) && !editing && (
                 <p className="view-only-tag">View only</p>
               )}
 
@@ -101,6 +101,12 @@ const CollaborativeRoom = ({
             </div>
             <div className="flex w-full flex-1 justify-end gap-2 sm:gap-3">
               <ActiveCollaborators />
+              <ShareModal
+                collaborators={users}
+                creatorId={roomMetadata.creatorId}
+                currentUserType={currentUserType}
+                roomId={roomId}
+              />
               <SignedOut>
                 <SignInButton />
               </SignedOut>

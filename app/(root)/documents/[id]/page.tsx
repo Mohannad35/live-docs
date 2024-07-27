@@ -20,17 +20,22 @@ const DocumentPage = async ({ params: { id } }: SearchParamProps) => {
   const usersData: User[] = users.map((user) => {
     return {
       ...user,
-      userType: (room.usersAccesses[user.email] as string[])?.includes("room:write")
-        ? "editor"
-        : "viewer",
+      userType:
+        room.metadata.creatorId === user.id
+          ? "creator"
+          : (room.usersAccesses[user.email] as string[])?.includes("room:write")
+            ? "editor"
+            : "viewer",
     };
   });
-
-  const currentUserType = (
-    room.usersAccesses[clerkUser.emailAddresses[0].emailAddress] as string[]
-  )?.includes("room:write")
-    ? "editor"
-    : "viewer";
+  const currentUserType =
+    room.metadata.creatorId === clerkUser.id
+      ? "creator"
+      : (room.usersAccesses[clerkUser.emailAddresses[0].emailAddress] as string[])?.includes(
+            "room:write",
+          )
+        ? "editor"
+        : "viewer";
 
   return (
     <main className="flex w-full flex-col items-center">

@@ -8,7 +8,9 @@ import { liveblocks } from "../liveblocks";
 export const getClerkUsers = async ({ userIds }: { userIds: string[] }) => {
   try {
     const clerk = clerkClient();
-    const { data } = await clerk.users.getUserList({ emailAddress: userIds });
+    const { totalCount, data } = await clerk.users.getUserList({ emailAddress: userIds });
+
+    if (totalCount === 0) return [];
     const users = data.map((user) => ({
       id: user.id,
       name: `${user.firstName} ${user.lastName}`,

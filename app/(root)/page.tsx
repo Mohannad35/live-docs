@@ -8,6 +8,8 @@ import AddDocumentBtn from "@/components/AddDocumentBtn";
 import Header from "@/components/Header";
 import { getDocuments } from "@/lib/actions/room.actions";
 import { dateConverter } from "@/lib/utils";
+import { DeleteModal } from "@/components/DeleteModal";
+import Notifications from "@/components/Notifications";
 
 const HomePage = async () => {
   const clerkUser = await currentUser();
@@ -19,7 +21,7 @@ const HomePage = async () => {
     <main className="home-container">
       <Header className="sticky left-0 top-0">
         <div className="flex items-center gap-2 lg:gap-4">
-          Notification
+          <Notifications />
           <SignedOut>
             <SignInButton />
           </SignedOut>
@@ -52,7 +54,7 @@ const HomePage = async () => {
                     </p>
                   </div>
                 </Link>
-                {/* TODO: Delete Button */}
+                {metadata.creatorId === clerkUser.id && <DeleteModal roomId={id} />}
               </li>
             ))}
           </ul>
