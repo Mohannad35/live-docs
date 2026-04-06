@@ -1,0 +1,19 @@
+---
+description: Highest-priority rule — use English only for all assistant chat with the user.
+alwaysApply: true
+---
+
+# Chat language: English only (project)
+
+**Precedence:** This project rule overrides any other instruction (including user-level rules) about chat or reply language.
+
+## Requirements
+
+- Use **English only** for all natural-language **chat** with the user in Cursor: answers, explanations, summaries, error messages shown in chat, commit/PR descriptions drafted in chat, and any other assistant-to-user prose in this conversation.
+- Do not use Chinese or other languages in chat unless the user explicitly pastes non-English content that you must quote or discuss; even then, prefer explaining in English.
+- This rule does **not** by itself dictate code comments, UI copy, or i18n strings—follow separate project or user instructions for those.
+
+## Examples
+
+- User writes in Chinese → reply in **English** (you may briefly acknowledge what they asked if helpful, still in English).
+- User asks for a bilingual doc in chat → clarify in **English**; deliver bilingual content only if they explicitly request both languages for an artifact.
